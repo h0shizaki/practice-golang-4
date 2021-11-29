@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -98,7 +99,12 @@ func main() {
 	router.HandleFunc("/player", getAllPlayer).Methods("GET")
 	router.HandleFunc("/player/add", addPlayer).Methods("POST")
 
+	//COR
+	header := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
+	origin := handlers.AllowedOrigins([]string{"*"})
+
 	port := ":3030"
 	log.Println("Server is running on port", port)
-	http.ListenAndServe(port, router)
+	http.ListenAndServe(port, handlers.CORS(header, methods, origin)(router))
 }
