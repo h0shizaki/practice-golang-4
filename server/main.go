@@ -85,6 +85,47 @@ func getAllPlayer(res http.ResponseWriter, req *http.Request) {
 
 }
 
+func getOnePlayer(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(req)
+
+	id, _ := primitive.ObjectIDFromHex(params["id"])
+
+	var player Player
+
+	collection := client.Database("mydb").Collection("player")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
+	err := collection.FindOne(ctx, bson.M{"_id": id}).Decode(&player)
+
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{"message" : "` + err.Error() + `"}`))
+	}
+
+	json.NewEncoder(res).Encode(player)
+
+}
+
+func delPlayer(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(req)
+	id, _ := primitive.ObjectIDFromHex(params["id"])
+
+	collection := client.Database("mydb").Collection("player")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
+	result, err := collection.DeleteOne(ctx, bson.D{{"_id", id}})
+
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{ "message" : "` + err.Error() + `" }`))
+	}
+
+	json.NewEncoder(res).Encode(result)
+}
+
 func main() {
 	log.Println("Start server")
 
@@ -97,7 +138,9 @@ func main() {
 	//route
 	router.HandleFunc("/status", checkStatus).Methods("GET")
 	router.HandleFunc("/player", getAllPlayer).Methods("GET")
+	router.HandleFunc("/player/{id}", getOnePlayer).Methods("GET")
 	router.HandleFunc("/player/add", addPlayer).Methods("POST")
+	router.HandleFunc("/delete/{id}", delPlayer).Methods("DELETE")
 
 	//COR
 	header := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
