@@ -126,6 +126,29 @@ func delPlayer(res http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(res).Encode(result)
 }
 
+func updatePlayer(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	var player Player
+
+	json.NewDecoder(req.Body).Decode(&player)
+
+	collection := client.Database("mydb").Collection("player")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
+	filter := bson.D{{"_id", player.ID}}
+	update := bson.D{{"$set", bson.D{{"name", player.Name}, {"level", player.Level}, {"rank", player.Rank}}}}
+
+	_, err := collection.UpdateOne(ctx, filter, update)
+
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`"message" : "` + err.Error() + `"`))
+	}
+
+	json.NewEncoder(res).Encode(player)
+
+}
+
 func main() {
 	log.Println("Start server")
 
@@ -140,7 +163,8 @@ func main() {
 	router.HandleFunc("/player", getAllPlayer).Methods("GET")
 	router.HandleFunc("/player/{id}", getOnePlayer).Methods("GET")
 	router.HandleFunc("/player/add", addPlayer).Methods("POST")
-	router.HandleFunc("/delete/{id}", delPlayer).Methods("DELETE")
+	router.HandleFunc("/player/delete/{id}", delPlayer).Methods("DELETE")
+	router.HandleFunc("/player/update", updatePlayer).Methods("PUT")
 
 	//COR
 	header := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
