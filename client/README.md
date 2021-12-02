@@ -1,5 +1,5 @@
 # Client with NodeJS express and VanilaJS  
-**Frontend with my cursed javascrpit skill**  
+**Frontend with my cursed javascript skill**  
 > Beautiful website? We don't need it here 🤣  
 
 ## How to run   
