@@ -19,7 +19,7 @@ function getData() {
                 trData += `<td>${result['level']}</td>`;
                 trData += `<td>${result['rank']}</td>`;
                 trData += `<td><a href="/edit/${result['_id']}"><button class="btn btn-warning">Edit</button></a></td>`;
-                trData += `<td><a href="/del/${result['_id']}"><button class="btn btn-danger">Delete</button></a></td>`;
+                trData += `<td><a href="/player/delete/${result['_id']}"><button class="btn btn-danger">Delete</button></a></td>`;
                 trData += "</tr>";
 
             })

@@ -17,7 +17,7 @@ app.get("/edit/:id" , (req,res)=> {
     res.sendFile(path.resolve(__dirname, "assets","static","html", "edit.html"));
 } )
 
-app.get("/del/:id" ,(req,res)=>{
+app.get("/player/delete/:id" ,(req,res)=>{
     res.sendFile(path.resolve(__dirname, "assets","static","html", "del.html"));
 })
 

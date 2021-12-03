@@ -11,12 +11,25 @@
 </head>
 <body>
     <nav style="margin: 1em;">
-        <a href="/" style="padding: 5px;"><button class="btn btn-primary">Home</button></a>
-        <a href="/add" style="padding: 5px;"><button class="btn btn-success">Add player</button></a>
+        <a href="/" style="padding: 5px;"><button class="btn btn-primary">Back</button></a>
     </nav>
 
-
     <h1 style="margin: 1em;">Add player</h1>
+
+    <div class="container">
+        <div class = "form form-control">
+            Name:
+            <input type="text" name="name" id= "name" class="form form-control">
+            Level:
+            <input type="number" min="0" max="100" name="lvl" id="lvl" class="form form-control">
+            Rank:
+            <input type="text" name="rank" id= "rank" class="form form-control">
+            <br>
+
+            <button class="btn btn-success" id="submit">Add</button>
+
+        </div>
+    </div>
 
     <script src="/static/js/add.js" type="module"></script>
 </body>
