@@ -4,8 +4,9 @@
 
 ## How to run   
 1.  Clone this repo.  
-2.   Download and dependency and run  
+2.  Download dependency and run  
  ```
+ cd client  
  npm install  
  npm run dev  
 ```  
